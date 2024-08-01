@@ -14,4 +14,5 @@ router.group(() => {
     return { hello: 'world' }
   })
 
+  router.post('moments', 'MomentsController.store')
 }).prefix('/api')
