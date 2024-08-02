@@ -3,9 +3,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Moment from '#models/moment'
 import app from '@adonisjs/core/services/app'
 
-
-
-
 export default class MomentsController {
 
   // define as opções de validação nesse caso é uma imagem de até 2mb
@@ -26,15 +23,8 @@ export default class MomentsController {
   }
 
   /**
-   * Display form to create a new record
-   */
-  // async create({}: HttpContext) {}
-
-  /**
    * Handle form submission for the create action
    */
-
-
   async store({ request, response }: HttpContext) {
     // faz uma requisição para o body 'corpo' da requisição
     const body = request.body()
@@ -56,7 +46,6 @@ export default class MomentsController {
       body.image = imageName
     }
 
-
     // cria um novo registro no banco de dados
     const moment = await Moment.create(body)
 
@@ -67,7 +56,6 @@ export default class MomentsController {
       message: 'Momento criado com sucesso!',
       data: moment,
     }
-    
   }
 
   /**
@@ -82,17 +70,48 @@ export default class MomentsController {
   }
 
   /**
-   * Edit individual record
-   */
-  // async edit({ params }: HttpContext) {}
-
-  /**
    * Handle form submission for the edit action
    */
-  // async update({ params, request }: HttpContext) {}
+  async update({ params, request }: HttpContext) {
+
+    const moment = await Moment.findOrFail(params.id)
+
+    const body = request.body()
+
+    moment.title = body.title
+    moment.description = body.description
+
+    if(moment.image !== body.image || !moment.image) {
+      const image = request.file('image', this.validationOptions)
+
+      if(image) {
+        const imageName = `${uuidv4()}.${image.extname}`
+
+        await image.move(app.tmpPath('uploads'), {
+          name: imageName,
+        })
+
+        moment.image = imageName
+      }
+    }
+    await moment.save()
+
+    return {
+      message: 'Momento atualizado com sucesso!',
+      data: moment,
+    }
+  }
 
   /**
    * Delete record
    */
-  // async destroy({ params }: HttpContext) {}
+  async destroy({ params }: HttpContext) {
+    const moment = await Moment.findOrFail(params.id)
+    await moment.delete()
+
+    return {
+      message: 'Momento removido com sucesso!',
+      data: moment,
+    }
+  }
 }
