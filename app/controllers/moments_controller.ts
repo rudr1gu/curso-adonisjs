@@ -1,9 +1,9 @@
 // import type { HttpContext } from '@adonisjs/core/http'
 
 export default class MomentsController {
-    public async store(){
+    public async store () {
         return {
-            msg: 'Deu certo!',
+            msg: 'Funcionou',
         }
     }
 }
