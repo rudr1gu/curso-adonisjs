@@ -8,8 +8,9 @@
 */
 
 import router from '@adonisjs/core/services/router'
-// import MomentsController from '#controllers/moments_controller'
 const MomentsController = () => import('#controllers/moments_controller')
+import CommentsController from '#controllers/comments_controller'
+
 
 router.group(() => {
   router.get('/', async () => {
@@ -17,5 +18,6 @@ router.group(() => {
   })
 
   router.resource('/moments', MomentsController ).apiOnly()
+  router.post('/moments/:momentId/comments', [CommentsController, 'store'])
 
 }).prefix('/api')
