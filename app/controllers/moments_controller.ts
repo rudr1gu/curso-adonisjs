@@ -11,7 +11,11 @@ export default class MomentsController {
   }
 
   async index() {
-    const moments = await Moment.all()
+    // mostra todos os momentos
+    // const moments = await Moment.all()
+
+    // mostra todos os momentos com os comentários relacionados a ele.
+    const moments = await Moment.query().preload("comments")
 
     return {
       data: moments,
@@ -44,6 +48,8 @@ export default class MomentsController {
 
   async show({ params }: HttpContext) {
     const moment = await Moment.findOrFail(params.id)
+
+    await moment.load('comments')
 
     return {
       data: moment,
