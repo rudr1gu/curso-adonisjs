@@ -1,4 +1,4 @@
-# API de Momentos e Comentários
+# API AdonisJS
 
 Este é o README para o projeto de API que utiliza o framework AdonisJS para criar um CRUD (Create, Read, Update, Delete) utilizando o banco de dados SQLite. O projeto consiste em duas tabelas: "momentos" e "comentarios", que possuem um relacionamento entre si.
 
